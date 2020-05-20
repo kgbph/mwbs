@@ -12,8 +12,8 @@ $(document).ready(function () {
         $('.alert').alert('close');
 
         $.ajax({
-            url: this.action,
-            method: this.method,
+            url: 'http://mngtool.ynsdev.pw',
+            method: 'POST',
             context: this,
             data: $(this).serialize(),
             complete: function () {
