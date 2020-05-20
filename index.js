@@ -13,8 +13,8 @@ const createWindow = () => {
     height: 600,
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'src/index.html'));
+  // and load the login.html of the app.
+  mainWindow.loadFile(path.join(__dirname, 'src/login.html'));
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
