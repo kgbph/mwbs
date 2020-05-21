@@ -1,8 +1,15 @@
 $(document).ready(function () {
     let taskRowTemplate = $('#tmpTaskRow').html();
 
-    $('#btnAddTask').click(function () {
-        $(taskRowTemplate).insertBefore('#tblTasks > tbody > tr:last');
+    $('#tblTasks > tbody').append(taskRowTemplate);
+
+    $('#tblTasks').on('click', '.btn-add-task', function () {
+        $('#tblTasks > tbody').append(taskRowTemplate);
+
+        $(this)
+            .removeClass('btn-secondary btn-add-task')
+            .addClass('btn-danger btn-remove-task')
+            .text('Remove');
     });
 
     $('#tblTasks').on('click', '.btn-remove-task', function () {
