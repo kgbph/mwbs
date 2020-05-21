@@ -47,8 +47,13 @@
 
   <template id="tmpTaskRow">
     <tr>
-      <td><input type="text" class="form-control" placeholder="Task code"></td>
-      <td><input type="number" class="form-control" placeholder="Actual hours"></td>
+      <td>
+        <input type="text" class="form-control inp-code" placeholder="Task code">
+        <input type="hidden" class="inp-milestone">
+        <input type="hidden" class="inp-project">
+        <div class="valid-feedback"></div>
+      </td>
+      <td><input type="number" class="form-control inp-time" placeholder="Actual hours"></td>
       <td><button type="button" class="btn btn-danger btn-remove-task">Remove</button></td>
     </tr>
   </template>

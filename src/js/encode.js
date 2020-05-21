@@ -11,27 +11,59 @@ $(document).ready(function () {
             .remove();
     });
 
+    $('#tblTasks').on('blur', '.inp-code', function () {
+        $.ajax({
+            url: 'http://mngtool.ynsdev.pw/users/find_task',
+            method: 'POST',
+            context: this,
+            data: { task_code: $(this).val() },
+            success: function (response) {
+                let parent = $(this)
+                    .parents('td')
+                    .addClass('was-validated');
+                parent
+                    .find('.valid-feedback')
+                    .text(response.data.task.name);
+                parent
+                    .find('.inp-milestone')
+                    .val(response.data.milestone.id);
+                parent
+                    .find('.inp-project')
+                    .val(response.data.project.id);
+            }
+        });
+    });
+
     $('#frmEncode').submit(function (e) {
         e.preventDefault();
 
         $('.alert').alert('close');
 
-        $.ajax({
-            url: 'http://mngtool.ynsdev.pw',
-            method: 'POST',
-            context: this,
-            data: $(this).serialize(),
-            complete: function () {
-                if (xhr.responseURL === 'http://mngtool.ynsdev.pw/current_project_status') {
-                    location.href = 'encode.html';
-                } else {
-                    $(this).prepend($('<div>', {
-                        class: 'alert alert-danger',
-                        text: 'Incorrect user name or password.',
-                        role: 'alert'
-                    }));
+        let tasks = $('#tblTasks > tbody > tr').not(':last').map(function () {
+            return {
+                code: $(this).find('.inp-code').val(),
+                time: $(this).find('.inp-time').val(),
+                milestone: $(this).find('.inp-milestone').val(),
+                project: $(this).find('.inp-project').val()
+            };
+        });
+
+        $.when(...tasks.map(function () {
+            return $.ajax({
+                url: 'http://mngtool.ynsdev.pw/users/productivity_add',
+                method: 'POST',
+                context: this,
+                data: {
+                    work_date: new Date().toISOString().slice(0, 10),
+                    task_code: this.code,
+                    actual_times: this.time,
+                    estimate_times: 0,
+                    milestone_id: this.milestone,
+                    project_id: this.project
                 }
-            }
+            });
+        })).done(function () {
+            location.href = 'done.html';
         });
     });
 });
