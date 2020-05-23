@@ -1,5 +1,8 @@
 {
   "private": true,
+  "name": "mwbs",
+  "description": "MWBS electron app",
+  "author": "kgbph",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
