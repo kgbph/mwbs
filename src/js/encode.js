@@ -64,7 +64,7 @@ $(document).ready(function () {
 
         $('.alert').alert('close');
 
-        let tasks = $('#tblTasks > tbody > tr').not(':last').map(function () {
+        let tasks = $('#tblTasks > tbody > tr').map(function () {
             return {
                 code: $(this).find('.inp-code').val(),
                 time: $(this).find('.inp-time').val(),
