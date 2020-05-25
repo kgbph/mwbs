@@ -1,4 +1,22 @@
 $(document).ready(function () {
+
+    $.ajax({
+        url: 'http://mngtool.ynsdev.pw/users/productivity',
+        method: 'GET',
+        context: this,
+        success: function (response) {
+            if ($(response).find('.productivity__wrapper').length) {
+                $('#frmEncode').prepend($('<div>', {
+                    class: 'alert alert-danger',
+                    text: 'Your tasks are already encoded. Please use the task management system for updating your tasks.',
+                    role: 'alert'
+                }));
+
+                $('#frmEncode :input').prop('disabled', true);
+            }
+        }
+    });
+
     let taskRowTemplate = $('#tmpTaskRow').html();
 
     $('#tblTasks > tbody').append(taskRowTemplate);
