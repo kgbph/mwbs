@@ -45,8 +45,7 @@
             "repository": {
               "owner": "kgbph",
               "name": "mwbs"
-            },
-            "prerelease": true
+            }
           }
         }
       ]
