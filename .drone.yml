@@ -1,0 +1,24 @@
+---
+kind: pipeline
+type: docker
+name: default
+steps:
+  - name: build
+    image: node:latest
+    environment:
+      GITHUB_TOKEN:
+        from_secret: GITHUB_TOKEN
+    commands:
+      - npm ci
+      - npm run publish --dry-run
+  - name: release
+    image: node:latest
+    environment:
+      GITHUB_TOKEN:
+        from_secret: GITHUB_TOKEN
+    commands:
+      - npm ci
+      - npm run publish
+    when:
+      event:
+        - tag
