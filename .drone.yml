@@ -4,7 +4,7 @@ type: docker
 name: default
 steps:
   - name: build
-    image: node:latest
+    image: stefanscherer/node-windows:latest
     environment:
       GITHUB_TOKEN:
         from_secret: GITHUB_TOKEN
@@ -13,6 +13,9 @@ steps:
       - npm run publish --dry-run
   - name: release
     image: node:latest
+    platform:
+      os: windows
+      arch: amd64
     environment:
       GITHUB_TOKEN:
         from_secret: GITHUB_TOKEN
