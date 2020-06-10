@@ -7,7 +7,7 @@ steps:
     image: node:latest
     commands:
       - npm ci
-      - npx electron-forge make --arch=x64 --platform=win32 --targets=@electron-forge/maker-squirrel
+      - npm run build
   - name: release
     image: plugins/github-release
     settings:
