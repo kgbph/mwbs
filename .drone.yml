@@ -1,0 +1,19 @@
+---
+kind: pipeline
+type: docker
+name: default
+steps:
+  - name: build
+    image: node:latest
+    commands:
+      - npm ci
+      - npx electron-forge make --arch=x64 --platform=win32 --targets=@electron-forge/maker-squirrel
+  - name: release
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: GITHUB_TOKEN
+      files: dist/*
+    when:
+      event:
+        - tag
