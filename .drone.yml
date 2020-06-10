@@ -6,6 +6,10 @@ steps:
   - name: build
     image: node:latest
     commands:
+      - dpkg --add-architecture i386
+      - apt update -y
+      - apt-get upgrade -y
+      - apt install mono-devel wine32 wine64 -y
       - npm ci
       - npm run build
   - name: release
