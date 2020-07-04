@@ -3,10 +3,13 @@ kind: pipeline
 type: docker
 name: default
 steps:
-  - name: check
+  - name: install
     image: node:latest
     commands:
       - npm ci
+  - name: check
+    image: node:latest
+    commands:
       - npm run lint
   - name: build
     image: node:latest
@@ -15,7 +18,6 @@ steps:
       - apt update -y
       - apt-get upgrade -y
       - apt install mono-devel wine32 wine64 -y
-      - npm ci
       - npm run build
     when:
       event:
