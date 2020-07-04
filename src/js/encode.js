@@ -2,59 +2,55 @@ $(document).ready(() => {
   $.ajax({
     url: 'http://mngtool.ynsdev.pw/users/productivity',
     method: 'GET',
-    context: this,
-    success(response) {
-      if ($(response).find('.productivity__wrapper').length) {
-        $('#frmEncode').prepend($('<div>', {
-          class: 'alert alert-danger',
-          text: 'Your tasks are already encoded. Please use the task management system for updating your tasks.',
-          role: 'alert',
-        }));
+  }).then((response) => {
+    if ($(response).find('.productivity__wrapper').length) {
+      $('#frmEncode').prepend($('<div>', {
+        class: 'alert alert-danger',
+        text: 'Your tasks are already encoded. Please use the task management system for updating your tasks.',
+        role: 'alert',
+      }));
 
-        $('#frmEncode :input').prop('disabled', true);
-      }
-    },
+      $('#frmEncode :input').prop('disabled', true);
+    }
   });
 
   const taskRowTemplate = $('#tmpTaskRow').html();
 
   $('#tblTasks > tbody').append(taskRowTemplate);
 
-  $('#tblTasks').on('click', '.btn-add-task', () => {
+  $('#tblTasks').on('click', '.btn-add-task', (e) => {
     $('#tblTasks > tbody').append(taskRowTemplate);
 
-    $(this)
+    $(e.currentTarget)
       .removeClass('btn-secondary btn-add-task')
       .addClass('btn-danger btn-remove-task')
       .text('Remove');
   });
 
-  $('#tblTasks').on('click', '.btn-remove-task', () => {
-    $(this)
+  $('#tblTasks').on('click', '.btn-remove-task', (e) => {
+    $(e.currentTarget)
       .parents('tr')
       .remove();
   });
 
-  $('#tblTasks').on('blur', '.inp-code', () => {
+  $('#tblTasks').on('blur', '.inp-code', (e) => {
     $.ajax({
       url: 'http://mngtool.ynsdev.pw/users/find_task',
       method: 'POST',
-      context: this,
-      data: { task_code: $(this).val() },
-      success(response) {
-        const parent = $(this)
-          .parents('td')
-          .addClass('was-validated');
-        parent
-          .find('.valid-feedback')
-          .text(response.data.task.name);
-        parent
-          .find('.inp-milestone')
-          .val(response.data.milestone.id);
-        parent
-          .find('.inp-project')
-          .val(response.data.project.id);
-      },
+      data: { task_code: $(e.currentTarget).val() },
+    }).then((response) => {
+      const parent = $(e.currentTarget)
+        .parents('td')
+        .addClass('was-validated');
+      parent
+        .find('.valid-feedback')
+        .text(response.data.task.name);
+      parent
+        .find('.inp-milestone')
+        .val(response.data.milestone.id);
+      parent
+        .find('.inp-project')
+        .val(response.data.project.id);
     });
   });
 
@@ -64,26 +60,25 @@ $(document).ready(() => {
     $('.alert').alert('close');
 
     const tasks = $('#tblTasks > tbody > tr').map(() => ({
-      code: $(this).find('.inp-code').val(),
-      time: $(this).find('.inp-time').val(),
-      milestone: $(this).find('.inp-milestone').val(),
-      project: $(this).find('.inp-project').val(),
+      code: $(e.currentTarget).find('.inp-code').val(),
+      time: $(e.currentTarget).find('.inp-time').val(),
+      milestone: $(e.currentTarget).find('.inp-milestone').val(),
+      project: $(e.currentTarget).find('.inp-project').val(),
     }));
 
-    $.when(...tasks.map(() => $.ajax({
+    $.when(...tasks.map((_, task) => $.ajax({
       url: 'http://mngtool.ynsdev.pw/users/productivity_add',
       method: 'POST',
-      context: this,
       data: {
         work_date: new Date().toISOString().slice(0, 10),
-        task_code: this.code,
-        actual_times: this.time,
+        task_code: task.code,
+        actual_times: task.time,
         estimate_times: 0,
-        milestone_id: this.milestone,
-        project_id: this.project,
+        milestone_id: task.milestone,
+        project_id: task.project,
       },
-    }))).done(() => {
+    }).done(() => {
       window.location.href = 'done.html';
-    });
+    })));
   });
 });

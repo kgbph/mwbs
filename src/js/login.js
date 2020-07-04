@@ -14,19 +14,17 @@ $(document).ready(() => {
     $.ajax({
       url: 'http://mngtool.ynsdev.pw',
       method: 'POST',
-      context: this,
-      data: $(this).serialize(),
-      complete() {
-        if (xhr.responseURL === 'http://mngtool.ynsdev.pw/current_project_status') {
-          window.location.href = 'encode.html';
-        } else {
-          $(this).prepend($('<div>', {
-            class: 'alert alert-danger',
-            text: 'Incorrect user name or password.',
-            role: 'alert',
-          }));
-        }
-      },
+      data: $(e.currentTarget).serialize(),
+    }).done(() => {
+      if (xhr.responseURL === 'http://mngtool.ynsdev.pw/current_project_status') {
+        window.location.href = 'encode.html';
+      } else {
+        $(e.currentTarget).prepend($('<div>', {
+          class: 'alert alert-danger',
+          text: 'Incorrect user name or password.',
+          role: 'alert',
+        }));
+      }
     });
   });
 });
